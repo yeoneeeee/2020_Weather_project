@@ -41,4 +41,6 @@
 
 
 ## :family: Developer 
-@Below0
+* :[박주연](https://github.com/Ju-Yeon)
+* :[이하영](https://github.com/Below0)
+* :[이예은](https://github.com/gomamon)
