@@ -14,7 +14,7 @@
 
   
 
-<img src="/img/story-01.png">
+<p align="center"><img src="/img/story-01.png"></p>
 
 
 
@@ -22,7 +22,7 @@
 
   
 
-<img src="/img/story-02.png">
+<p align="center"><img src="/img/story-02.png"></p>
 
 
 
@@ -30,13 +30,13 @@
 
   
 
-<img src="/img/story-03.png">
+<p align="center"><img src="/img/story-03.png"></p>
 
 
 
 ## :computer: Aritecture
 
-<img src="./img/architecture.jpg">
+<img src="./img/architecture.jpg" width=90%>
 
 
 
