@@ -6,7 +6,7 @@
 >
 > 시제품 개발 부문 - 쓱싹쓱싹 팀
 
-
+<br>
 
 ## :book: Storyboard
 
@@ -14,7 +14,7 @@
 
   
 
-<img src="/img/story-01.png">
+<p align="center"><img src="/img/story-01.png"></p>
 
 
 
@@ -22,7 +22,7 @@
 
   
 
-<img src="/img/story-02.png">
+<p align="center"><img src="/img/story-02.png"></p>
 
 
 
@@ -30,19 +30,19 @@
 
   
 
-<img src="/img/story-03.png">
+<p align="center"><img src="/img/story-03.png"></p>
 
 
 
 ## :computer: Aritecture
 
-<img src="./img/architecture.jpg">
+<img src="./img/architecture.jpg" width=90%>
 
 
+<br>
 
 ## :family: Developer 
-
-+ 이하영
-+ 신지원
-+ 최해민
-+ 김수연
+* [이하영](https://github.com/Below0)
+* [신지원](https://github.com/nayajiwon)
+* [최해민](https://github.com/choiiis)
+* [김수연](https://github.com/yeoneeeee)
