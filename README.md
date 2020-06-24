@@ -8,31 +8,39 @@
 
 
 
-### :book: Storyboard
+## :book: Storyboard
 
 + **날씨에 따른 세차 날짜 추천**
 
+  
+
 <img src="/img/story-01.png">
+
+
 
 + **세차 기록 관리**
 
+  
+
 <img src="/img/story-02.png">
+
+
 
 + **세차 알림**
 
+  
+
 <img src="/img/story-03.png">
 
-### :computer: Aritecture
+
+
+## :computer: Aritecture
 
 <img src="./img/architecture.jpg">
 
 
 
-
-
------
-
-### :family: Developer 
+## :family: Developer 
 
 + 이하영
 + 신지원
