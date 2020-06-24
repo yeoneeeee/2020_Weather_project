@@ -42,7 +42,7 @@
 
 ## :family: Developer 
 
-+ 이하영
++ 이하영 - @Below0
 + 신지원
 + 최해민
 + 김수연
