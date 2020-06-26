@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'weather',
+    'location',
 ]
 
 MIDDLEWARE = [
@@ -113,8 +114,9 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
 CRONJOBS = [
-    ('* * * * *', 'batch.cron_job.test'),
+    ('* * * * *', "cron_job.test"),
 ]
 
 

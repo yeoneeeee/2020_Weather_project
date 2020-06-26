@@ -1,8 +1,7 @@
-import logging
+import pymongo
+from location.models import Location
 
 
-def test():
-    with open("./test.txt", 'w') as f:
-        for i in range(1, 11):
-            data = "test"
-            f.write(data)
+conn = pymongo.MongoClient('127.0.0.1', 27017)
+db = conn.get_database('scsc')
+collection = db.get_collection('weather_info')
