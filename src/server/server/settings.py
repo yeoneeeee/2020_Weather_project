@@ -33,7 +33,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 
-# Application definition
+# Application definitionX
 
 INSTALLED_APPS = [
     'django_crontab',
@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'weather',
 ]
 
 MIDDLEWARE = [
@@ -113,7 +114,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 CRONJOBS = [
-    ('* * * * *', 'batch.cron_jop.cron_job'),
+    ('* * * * *', 'batch.cron_job.test'),
 ]
 
 
