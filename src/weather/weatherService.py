@@ -1,20 +1,29 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[33]:
-
 
 import json
 import urllib.request
 import time
 from datetime import datetime, timedelta
-
+import os
 import json
+import pymongo
+
+
+
+conn = pymongo.MongoClient('127.0.0.1', 27017)
+db = conn.get_database('scsc')
+collection = db.get_collection('test')
+
+
+
 with open("./config/config.json", "r") as sk_json:
     service_key = json.load(sk_json)['key']
     
 class ShortWeatherService:
-    
+
+
     def get_fcst(self,regID = '11B10101'):
         result_dict = {}
         address = "http://apis.data.go.kr/1360000/VilageFcstMsgService/getLandFcst?serviceKey="+service_key+"&numOfRows=10&pageNo=1&numOfRows=10&pageNo=1&dataType=JSON"
@@ -52,10 +61,12 @@ class ShortWeatherService:
                     record['regID'] = regID
                     record['rnStAm'] = j[numEf]['rnSt']
                     record['wfAm'] = j[numEf]['wf']
+                    record['taMin'] = j[numEf]['ta']
                     
                 else:
                     record['rnStPm'] = j[numEf]['rnSt']
                     record['wfPm'] = j[numEf]['wf']
+                    record['taMax'] = j[numEf]['ta']
                     result.append(record)
             
         return result
@@ -149,25 +160,17 @@ class MidWeatherService: # 중기예보 서비스 모듈
             result.append(record)
             
         return result
-            
-                
-            
-            
-        
-            
-            
-
-
-# In[34]:
-
 
 short = ShortWeatherService()
-print(short.get_fcst())
-
-
-# In[35]:
-
-
 mid = MidWeatherService()
-print(mid.make_record())
+
+short_res = short.get_fcst()
+mid_res = mid.make_record()
+
+upserts=[ pymongo.UpdateOne({'date': x['date'], 'regID':x['regID']}, {'$set': x}, upsert=True) for x in short_res]
+result = collection.bulk_write(upserts)
+
+upserts=[ pymongo.UpdateOne({'date': x['date'], 'regID':x['regID']}, {'$set': x}, upsert=True) for x in mid_res]
+result = collection.bulk_write(upserts)
+#collection.insert_many(mid.make_record())
 
