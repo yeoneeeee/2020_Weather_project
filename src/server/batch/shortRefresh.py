@@ -34,30 +34,46 @@ class ShortWeatherService:
         announce_time = str(j[0]['announceTime'])[-4:]
 
         if announce_time == "0500":
-            time_delta += 1
+            for numEf in range(0, 6):
+                if numEf % 2 == 0:
+                    target_date = (date + timedelta(days=(numEf+1) / 2)).strftime('%Y%m%d')
+                    record = {'date': target_date, 'regID': regID, 'rnStAm': j[numEf]['rnSt'], 'wfAm': j[numEf]['wf']}
+                    if j[numEf]['ta'] is not None:
+                        record['taMin'] = j[numEf]['ta']
+                else:
+                    record['rnStPm'] = j[numEf]['rnSt']
+                    record['wfPm'] = j[numEf]['wf']
+                    record['taMax'] = j[numEf]['ta']
+                    result.append(record)
 
-        for numEf in range(1, 5):
-            numEf += time_delta
-            if numEf % 2 == 1:
-                record = {}
-                target_date = (date + timedelta(days=numEf / 2)).strftime('%Y%m%d')
-                record['date'] = target_date
-                record['regID'] = regID
-                record['rnStAm'] = j[numEf]['rnSt']
-                record['wfAm'] = j[numEf]['wf']
-                record['taMin'] = j[numEf]['ta']
+        else:
+            record = {
+                'date': date.strftime('%Y%m%d'),
+                'regID': regID,
+                'wfPm': j[0]['wf'],
+                'rnStPm': j[0]['rnSt']
+            }
+            if j[0]['ta'] is not None:
+                record['taMax'] = j[0]['ta']
 
-            else:
-                record['rnStPm'] = j[numEf]['rnSt']
-                record['wfPm'] = j[numEf]['wf']
-                record['taMax'] = j[numEf]['ta']
-                result.append(record)
+            result.append(record)
+
+            for numEf in range(1, 5):
+                if numEf % 2 == 1:
+                    target_date = (date + timedelta(days=(numEf+1) / 2)).strftime('%Y%m%d')
+                    record = {'date': target_date, 'regID': regID, 'rnStAm': j[numEf]['rnSt'], 'wfAm': j[numEf]['wf'],
+                              'taMin': j[numEf]['ta']}
+                else:
+                    record['rnStPm'] = j[numEf]['rnSt']
+                    record['wfPm'] = j[numEf]['wf']
+                    record['taMax'] = j[numEf]['ta']
+                    result.append(record)
 
         return result
 
 
 s_service = ShortWeatherService()
 res = s_service.make_record()
-
 bulk_list = [pymongo.UpdateOne({'date': x['date'], 'regID': x['regID']}, {'$set': x}, upsert=True) for x in res]
-result = weather_col.bulk_write(bulk_list)
+weather_col.bulk_write(bulk_list)
+print("Update short weather")

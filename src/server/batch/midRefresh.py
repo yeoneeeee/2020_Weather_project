@@ -106,3 +106,4 @@ res = m_service.make_record()
 
 bulk_list = [pymongo.UpdateOne({'date': x['date'], 'regID': x['regID']}, {'$set': x}, upsert=True) for x in res]
 result = weather_col.bulk_write(bulk_list)
+print("Update mid weather")
