@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 
 conn = pymongo.MongoClient('127.0.0.1', 27017)
 db = conn.get_database('scsc')
-weather_col = db.get_collection('test')
+weather_col = db.get_collection('weather')
 score_col = db.get_collection('score')
 
 with open("./config/config.json", "r") as sk_json:
