@@ -5,7 +5,7 @@ import time
 from datetime import datetime, timedelta
 
 
-with open("./config/config.json", "r") as sk_json:
+with open("./config/key.json", "r") as sk_json:
     service_key = json.load(sk_json)['key']
 
 

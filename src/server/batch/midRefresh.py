@@ -9,7 +9,7 @@ db = conn.get_database('scsc')
 weather_col = db.get_collection('weather')
 score_col = db.get_collection('score')
 
-with open("./config/config.json", "r") as sk_json:
+with open("../config/key.json", "r") as sk_json:
     service_key = json.load(sk_json)['key']
 
 
@@ -78,7 +78,6 @@ class MidWeatherService:  # 중기예보 서비스 모듈
 
         for day in range(3, 11):
             target_date = (date + timedelta(days=day)).strftime('%Y%m%d')
-            record = {}
             record = {'date': target_date, 'regID': regID, 'taMin': ta['taMin' + str(day)],
                       'taMax': ta['taMax' + str(day)]}
 

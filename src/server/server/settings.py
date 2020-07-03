@@ -12,14 +12,13 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 import json
+import pymongo
 
-
-with open("./config/db.json", "r") as config_json:
-    config_dict = json.load(config_json)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+with open(BASE_DIR+"/config/mysql.json", "r") as config_json:
+    config_dict = json.load(config_json)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -30,7 +29,7 @@ SECRET_KEY = '6d$8@jg)f9luyj!fwouxmfj+b+7yzq+m_0pi6nts3bzip)+o%w'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definitionX
@@ -45,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'weather',
     'location',
+    'score',
 ]
 
 MIDDLEWARE = [
