@@ -1,3 +1,5 @@
+import csv
+
 import pymongo
 import json
 import urllib.request
@@ -15,10 +17,14 @@ with open("../config/key.json", "r") as sk_json:
 
 class ScoreCaculator:
 
-    def __init__(self, rec):
-        self.rec = list(rec)
+    def __init__(self):
         self.lv_list = []
         self.cnt = rec.count()
+        with open('location_code.csv', 'r') as f:
+            rdr = csv.reader(f)
+            self.code = [item for item in rdr][0]
+            self.try_cnt = 0
+            self.TIME_OUT = 2
 
     def calc_ta(self, i):
         line = self.rec[i]
@@ -73,12 +79,29 @@ class ScoreCaculator:
 
 class ShortWeatherService:
 
+    def __init__(self):
+        with open('location_code.csv', 'r') as f:
+            rdr = csv.reader(f)
+            self.code = [item for item in rdr][0]
+            self.try_cnt = 0
+            self.TIME_OUT = 2
+
     def make_record(self, regID='11B10101'):
         result = []
         date = datetime.now()
         address = "http://apis.data.go.kr/1360000/VilageFcstMsgService/getLandFcst?serviceKey=" + service_key + "&numOfRows=10&pageNo=1&numOfRows=10&pageNo=1&dataType=JSON"
+        req = None
 
-        req = urllib.request.urlopen(address + "&regId=" + regID)
+        while self.try_cnt < 5 and req is None:
+            try:
+                req = urllib.request.urlopen(address + "&regId=" + regID)
+            except Exception as err:
+                self.try_cnt += 1
+                print(regID, "Retry:", self.try_cnt)
+                time.sleep(self.TIME_OUT)
+
+        self.try_cnt = 0
+
         res = req.readline()
 
         j = json.loads(res)
@@ -128,16 +151,26 @@ class ShortWeatherService:
 
         return result
 
+    def run(self):
+        size = len(self.code)
+        res = []
+        print("Update short Weather Start[0/{}]".format(size))
+        for i in range(0, size):
+            if i % 20 == 0:
+                print('Update.... {}/{}'.format(i, size))
+            res.extend(self.make_record(self.code[i]))
+
+        bulk_list = [pymongo.UpdateOne({'date': x['date'], 'regID': x['regID']}, {'$set': x}, upsert=True) for x in res]
+        weather_col.bulk_write(bulk_list)
+        print("Complete to update short Weather")
+
 
 s_service = ShortWeatherService()
-res = s_service.make_record()
-bulk_list = [pymongo.UpdateOne({'date': x['date'], 'regID': x['regID']}, {'$set': x}, upsert=True) for x in res]
-weather_col.bulk_write(bulk_list)
-print("Update short weather")
+s_service.run()
 
-rec = weather_col.find({"date": {"$gte": datetime.now().strftime('%Y%m%d')}})
-calculator = ScoreCaculator(rec)
-res = calculator.run()
-bulk_list = [pymongo.UpdateOne({'date': x['date'], 'regID': x['regID']}, {'$set': x}, upsert=True) for x in res]
-score_col.bulk_write(bulk_list)
-print("Update cleaner score")
+# rec = weather_col.find({"date": {"$gte": datetime.now().strftime('%Y%m%d')}})
+# calculator = ScoreCaculator(rec)
+# res = calculator.run()
+# bulk_list = [pymongo.UpdateOne({'date': x['date'], 'regID': x['regID']}, {'$set': x}, upsert=True) for x in res]
+# score_col.bulk_write(bulk_list)
+# print("Update cleaner score")

@@ -1,3 +1,5 @@
+import csv
+
 import pymongo
 import json
 import urllib.request
@@ -15,6 +17,13 @@ with open("../config/key.json", "r") as sk_json:
 
 class MidWeatherService:  # 중기예보 서비스 모듈
     # default = 서울
+
+    def __init__(self):
+        self.fc_cache = {}
+        with open('location_code.csv', 'r') as f:
+            rdr = csv.reader(f)
+            self.code = [item for item in rdr][0]
+
 
     def make_tmfc(self):  # 현재 시간을 기점으로 가장 마지막 예보 시간을 리턴
         tmfc = time.strftime('%Y%m%d', time.localtime(time.time()))
@@ -58,19 +67,24 @@ class MidWeatherService:  # 중기예보 서비스 모듈
             print('API CALL Failure')
 
     def get_fcst(self, regID='11B00000'):
+        cache_hit = self.fc_cache.get(regID, None)
+        if cache_hit is not None:
+            return cache_hit
+
         address = "http://apis.data.go.kr/1360000/MidFcstInfoService/getMidLandFcst?serviceKey=" + service_key + "&numOfRows=10&pageNo=1&dataType=JSON"
         req = urllib.request.urlopen(address + self.make_tmfc() + "&regId=" + regID)
-
         res = req.readline()
         j = json.loads(res)
+
         if j['response']['header']['resultCode'] == '00':
-            return j['response']['body']['items']['item'][0]
+            content = j['response']['body']['items']['item'][0]
+            self.fc_cache[content['regId']] = content
+            return content
 
         else:
             print('API CALL Failure')
 
     def make_record(self, regID='11B10101'):
-
         date = datetime.now()
         result = []
         ta = self.get_temperature(regID)
@@ -96,13 +110,26 @@ class MidWeatherService:  # 중기예보 서비스 모듈
                 record['wfPm'] = fcst[wf_key]
 
             result.append(record)
-
         return result
 
+    def run(self):
+        lst = []
+        size = len(self.code)
+        print("Update mid Weather Start[0/{}]".format(size))
+        for i in range(0, size):
+            if i % 17 == 0:
+                print('Update.... {}/{}'.format(i, size))
+            rec = self.make_record(self.code[i])
+            lst.extend(rec)
+
+        bulk_list = [pymongo.UpdateOne({'date': x['date'], 'regID': x['regID']}, {'$set': x}, upsert=True) for x in
+                     lst]
+        print(bulk_list)
+        weather_col.bulk_write(bulk_list)
+
+        print("Complete to update mid Weather")
 
 m_service = MidWeatherService()
-res = m_service.make_record()
+m_service.run()
 
-bulk_list = [pymongo.UpdateOne({'date': x['date'], 'regID': x['regID']}, {'$set': x}, upsert=True) for x in res]
-result = weather_col.bulk_write(bulk_list)
-print("Update mid weather")
+
