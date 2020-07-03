@@ -5,9 +5,9 @@ from .mongoManager import MongoDbManager
 # Create your views here.
 
 
-def weather_list(request, region):
+def score_list(request, region):
     date = datetime.datetime.now().strftime("%Y%m%d")
-    temp = MongoDbManager().get_weather_from_collection({"regID": region,"date": {"$gte": date}})
+    temp = MongoDbManager().get_sorted_score({"regID": region, "date": {"$gte": date}}, "score")
 
     if temp.count() < 1:
         return JsonResponse({"message": "해당하는 데이터가 없습니다."}, json_dumps_params= {'ensure_ascii': False})
@@ -21,8 +21,8 @@ def weather_list(request, region):
                          }, json_dumps_params= {'ensure_ascii': False})
 
 
-def weather_detail(request, region, date):
-    temp = MongoDbManager().get_weather_from_collection({"regID": region, "date": date})
+def score_detail(request, region, date):
+    temp = MongoDbManager().get_score_from_collection({"regID": region, "date": date})
     if temp.count() < 1:
        return JsonResponse({"message": "해당하는 데이터가 없습니다."}, json_dumps_params={'ensure_ascii': False})
 
