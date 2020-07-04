@@ -19,12 +19,11 @@ class ScoreCaculator:
 
     def __init__(self):
         self.lv_list = []
-        self.cnt = rec.count()
+        self.rec = {}
+        self.cnt = 0
         with open('location_code.csv', 'r') as f:
             rdr = csv.reader(f)
             self.code = [item for item in rdr][0]
-            self.try_cnt = 0
-            self.TIME_OUT = 2
 
     def calc_ta(self, i):
         line = self.rec[i]
@@ -52,12 +51,12 @@ class ScoreCaculator:
 
     def make_rnlv(self):
 
-        for i in range(len(self.rec)):
+        for i in range(self.cnt):
             am_lv = self.calc_rn(self.rec[i].get('rnStAm', None))
             pm_lv = self.calc_rn(self.rec[i].get('rnStPm', None))
             self.lv_list.append((am_lv, pm_lv))
 
-    def run(self):
+    def make_record(self):
         result = []
         self.make_rnlv()
 
@@ -75,6 +74,18 @@ class ScoreCaculator:
             doc['score'] = score
             result.append(doc)
         return result
+
+    def run(self):
+        size = len(self.code)
+        res = []
+        print("Start to refresh weather score...")
+        for i in range(size):
+            self.rec = weather_col.find({"regID": self.code[i], "date": {"$gte": datetime.now().strftime('%Y%m%d')}})
+            self.cnt = self.rec.count()
+            res.extend(self.make_record())
+        bulk_list = [pymongo.UpdateOne({'date': x['date'], 'regID': x['regID']}, {'$set': x}, upsert=True) for x in res]
+        score_col.bulk_write(bulk_list)
+        print("Complete to update weather score")
 
 
 class ShortWeatherService:
@@ -168,9 +179,5 @@ class ShortWeatherService:
 s_service = ShortWeatherService()
 s_service.run()
 
-# rec = weather_col.find({"date": {"$gte": datetime.now().strftime('%Y%m%d')}})
-# calculator = ScoreCaculator(rec)
-# res = calculator.run()
-# bulk_list = [pymongo.UpdateOne({'date': x['date'], 'regID': x['regID']}, {'$set': x}, upsert=True) for x in res]
-# score_col.bulk_write(bulk_list)
-# print("Update cleaner score")
+calculator = ScoreCaculator()
+calculator.run()
