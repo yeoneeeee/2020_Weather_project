@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'weather',
     'location',
     'wscore',
+    'car_wash',
 ]
 
 MIDDLEWARE = [

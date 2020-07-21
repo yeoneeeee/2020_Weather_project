@@ -94,25 +94,28 @@ class ShortWeatherService:
         with open('location_code.csv', 'r') as f:
             rdr = csv.reader(f)
             self.code = [item for item in rdr][0]
-            self.try_cnt = 0
-            self.TIME_OUT = 2
+        self.TIME_OUT = 0.5
+
+    def call_api(self, address):
+        req = None
+        try_cnt = 0
+
+        while try_cnt < 10 and req is None:
+            try:
+                req = urllib.request.urlopen(address, timeout=10)
+            except Exception as err:
+                try_cnt += 1
+                print("TIMEOUT Retry:", try_cnt)
+                time.sleep(self.TIME_OUT)
+
+        return req
 
     def make_record(self, regID='11B10101'):
         result = []
         date = datetime.now()
         address = "http://apis.data.go.kr/1360000/VilageFcstMsgService/getLandFcst?serviceKey=" + service_key + "&numOfRows=10&pageNo=1&numOfRows=10&pageNo=1&dataType=JSON"
-        req = None
 
-        while self.try_cnt < 5 and req is None:
-            try:
-                req = urllib.request.urlopen(address + "&regId=" + regID)
-            except Exception as err:
-                self.try_cnt += 1
-                print(regID, "Retry:", self.try_cnt)
-                time.sleep(self.TIME_OUT)
-
-        self.try_cnt = 0
-
+        req = self.call_api(address + "&regId=" + regID)
         res = req.readline()
 
         j = json.loads(res)
@@ -167,11 +170,12 @@ class ShortWeatherService:
         res = []
         print("Update short Weather Start[0/{}]".format(size))
         for i in range(0, size):
-            if i % 20 == 0:
+            if i % 10 == 0:
                 print('Update.... {}/{}'.format(i, size))
             res.extend(self.make_record(self.code[i]))
 
         bulk_list = [pymongo.UpdateOne({'date': x['date'], 'regID': x['regID']}, {'$set': x}, upsert=True) for x in res]
+        print(bulk_list)
         weather_col.bulk_write(bulk_list)
         print("Complete to update short Weather")
 

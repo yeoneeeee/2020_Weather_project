@@ -21,4 +21,5 @@ urlpatterns = [
     path('weather/', include('weather.urls')),
     path('location/', include('location.urls')),
     path('score/', include('wscore.urls')),
+    path('car_wash/', include('car_wash.urls'))
 ]
