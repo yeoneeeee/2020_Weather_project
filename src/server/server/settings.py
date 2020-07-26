@@ -16,8 +16,8 @@ import socket
 import pymongo
 
 os.environ['API_KEY'] = '9a3bb4a52c09371ab3dcab7b20d03210'
-#os.environ['IP'] = '127.0.0.1:8000'
-os.environ['IP'] = '52.26.131.225:8000'
+#os.environ['IP'] = '127.0.0.1'
+os.environ['IP'] = '52.26.131.225'
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -109,8 +109,7 @@ DATABASES = {
         'NAME': 'scsc',
         'USER': config_dict['user'],
         'PASSWORD': config_dict['pw'],
-      #  'HOST': '172.17.0.1',
-        'HOST': 'localhost',
+        'HOST': os.environ['IP'],
         'PORT': '3306',
         'OPTIONS': {
             'init_command': 'SET sql_mode="STRICT_TRANS_TABLES"'

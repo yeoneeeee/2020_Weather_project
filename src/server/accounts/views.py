@@ -11,14 +11,14 @@ def index(request):
 
 
 def kakao_login(request):
-    address = os.environ.get("IP")
+    address = os.environ.get("IP")+':8000'
     kakao_key = os.environ.get("API_KEY")
     return redirect(
         f"https://kauth.kakao.com/oauth/authorize?client_id={kakao_key}&redirect_uri=http://{address}/kakao/login/callback&response_type=code"
     )
 
 def kakao_callback(request):
-    address = os.environ.get("IP")
+    address = os.environ.get("IP")+':8000'
     kakao_key = os.environ.get("API_KEY")
     user_token = request.GET.get("code")
     token_request = requests.get(
