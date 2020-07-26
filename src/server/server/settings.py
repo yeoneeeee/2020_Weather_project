@@ -16,8 +16,8 @@ import socket
 import pymongo
 
 os.environ['API_KEY'] = '9a3bb4a52c09371ab3dcab7b20d03210'
-#os.environ['IP'] = '127.0.0.1'
-os.environ['IP'] = '52.26.131.225'
+os.environ['IP'] = '127.0.0.1'
+#os.environ['IP'] = '52.26.131.225'
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -38,10 +38,10 @@ ALLOWED_HOSTS = ['*']
 
 # Application definitionX
 
-AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
-    'allauth.accounts.auth_backends.AuthenticationBackend',
-)
+# AUTHENTICATION_BACKENDS = (
+#     'django.contrib.auth.backends.ModelBackend',
+#     'allauth.accounts.auth_backends.AuthenticationBackend',
+# )
 
 INSTALLED_APPS = [
     'django_crontab',
@@ -65,14 +65,14 @@ INSTALLED_APPS = [
     'location',
     'wscore',
     'car_wash',
-    'accounts'
+    'accounts',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+  #  'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -143,7 +143,7 @@ CRONJOBS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ko'
 
 TIME_ZONE = 'Asia/Seoul'
 
@@ -159,6 +159,7 @@ USE_TZ = True
 LOGIN_REDIRECT_URL = 'index' # 로그인 후 리디렉션할 페이지
 ACCOUNT_LOGOUT_REDIRECT_URL = "index"  # 로그아웃 후 리디렉션 할 페이지
 ACCOUNT_LOGOUT_ON_GET = True
+
 
 
 
