@@ -34,6 +34,11 @@ ALLOWED_HOSTS = ['*']
 
 # Application definitionX
 
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.accounts.auth_backends.AuthenticationBackend',
+)
+
 INSTALLED_APPS = [
     'django_crontab',
     'django.contrib.admin',
@@ -42,10 +47,21 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    #LOGIN
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.kakao',
+    'django.contrib.sites',
+
+
+    #APPS
     'weather',
     'location',
     'wscore',
     'car_wash',
+    'accounts'
 ]
 
 MIDDLEWARE = [
@@ -89,14 +105,14 @@ DATABASES = {
         'NAME': 'scsc',
         'USER': config_dict['user'],
         'PASSWORD': config_dict['pw'],
-        'HOST': '172.17.0.1',
+      #  'HOST': '172.17.0.1',
+        'HOST': 'localhost',
         'PORT': '3306',
         'OPTIONS': {
             'init_command': 'SET sql_mode="STRICT_TRANS_TABLES"'
         }
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -137,5 +153,10 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
+LOGIN_REDIRECT_URL = 'index' # 로그인 후 리디렉션할 페이지
+ACCOUNT_LOGOUT_REDIRECT_URL = "index"  # 로그아웃 후 리디렉션 할 페이지
+ACCOUNT_LOGOUT_ON_GET = True
 
 STATIC_URL = '/static/'
+
+SITE_ID = 1
