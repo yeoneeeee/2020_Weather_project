@@ -3,7 +3,7 @@ import pymongo
 
 class MongoDbManager:
     _instance = None
-    client = pymongo.MongoClient(host='localhost',
+    client = pymongo.MongoClient(host='172.17.0.1',
                                  port=27017)
     database = client['scsc']['score']
 

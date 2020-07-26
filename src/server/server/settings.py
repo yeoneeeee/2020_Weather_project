@@ -29,7 +29,7 @@ SECRET_KEY = '6d$8@jg)f9luyj!fwouxmfj+b+7yzq+m_0pi6nts3bzip)+o%w'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definitionX
@@ -89,7 +89,7 @@ DATABASES = {
         'NAME': 'scsc',
         'USER': config_dict['user'],
         'PASSWORD': config_dict['pw'],
-        'HOST': 'localhost',
+        'HOST': '172.17.0.1',
         'PORT': '3306',
         'OPTIONS': {
             'init_command': 'SET sql_mode="STRICT_TRANS_TABLES"'

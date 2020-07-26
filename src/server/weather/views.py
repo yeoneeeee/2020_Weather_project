@@ -7,6 +7,7 @@ from .mongoManager import MongoDbManager
 
 def weather_list(request, region):
     date = datetime.datetime.now().strftime("%Y%m%d")
+    print(date)
     temp = MongoDbManager().get_weather_from_collection({"regID": region,"date": {"$gte": date}})
 
     if temp.count() < 1:

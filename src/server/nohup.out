@@ -1,0 +1,24 @@
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Invalid HTTP_HOST header: '52.26.131.225:8000'. You may need to add '52.26.131.225' to ALLOWED_HOSTS.
+Bad Request: /
+[22/Jul/2020 02:01:00] "GET / HTTP/1.1" 400 61959
+Invalid HTTP_HOST header: '52.26.131.225:8000'. You may need to add '52.26.131.225' to ALLOWED_HOSTS.
+Bad Request: /favicon.ico
+[22/Jul/2020 02:01:01] "GET /favicon.ico HTTP/1.1" 400 62002
+Watching for file changes with StatReloader
+Not Found: /
+[22/Jul/2020 02:01:50] "GET / HTTP/1.1" 404 2357
+Not Found: /favicon.ico
+[22/Jul/2020 02:01:50] "GET /favicon.ico HTTP/1.1" 404 2408
+Not Found: /weather
+[22/Jul/2020 02:01:54] "GET /weather HTTP/1.1" 404 2396
+[22/Jul/2020 02:02:00] "GET /weather/1 HTTP/1.1" 200 54
+[22/Jul/2020 02:02:06] "GET /weather/20200720 HTTP/1.1" 200 54
+[22/Jul/2020 02:02:08] "GET /weather/20200723 HTTP/1.1" 200 54
+[22/Jul/2020 02:02:09] "GET /weather/20200725 HTTP/1.1" 200 54
+Not Found: /weather/
+[22/Jul/2020 02:02:13] "GET /weather/ HTTP/1.1" 404 2682
+Not Found: /score
+[22/Jul/2020 02:02:22] "GET /score HTTP/1.1" 404 2390
