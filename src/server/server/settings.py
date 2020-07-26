@@ -12,8 +12,13 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 import json
+import socket
 import pymongo
 
+ip_addr = socket.gethostbyname(socket.gethostname())+':8000'
+os.environ['API_KEY'] = '9a3bb4a52c09371ab3dcab7b20d03210'
+os.environ['IP'] = '127.0.0.1:8000'
+#os.environ['IP'] = ip_addr
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -156,6 +161,8 @@ USE_TZ = True
 LOGIN_REDIRECT_URL = 'index' # 로그인 후 리디렉션할 페이지
 ACCOUNT_LOGOUT_REDIRECT_URL = "index"  # 로그아웃 후 리디렉션 할 페이지
 ACCOUNT_LOGOUT_ON_GET = True
+
+
 
 STATIC_URL = '/static/'
 

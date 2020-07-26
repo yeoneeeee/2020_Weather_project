@@ -41,15 +41,14 @@
 						회원 이름 : {{ name }}
 					</div>
 					<span class="focus-input100-1"></span>
-
-					<div class="rs1 validate-input">
-						메일 주소 : {{ email }}
-					</div>
 				<form class="login100-form validate-form" action ="logout"> {% csrf_token %}
 
+
 					<div class="container-login100-form-btn m-t-20">
-						<button class="login100-form-btn" type="submit">
-							Logout
+						<button class="login100-form-btn">
+							<a href="{% url 'kakao_logout' %}" class="txt2 hov1">
+49								카카오로그인
+50							</a>
 						</button>
 					</div>
 
